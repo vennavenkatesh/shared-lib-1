@@ -3,6 +3,7 @@ pipeline {
     agent any
 
     parameters {
+        choice choices: ['Deployment', 'Rollback'], description: 'Make a choice', name: 'CLICK'
         string(name: 'IP', description: 'Please tell me your IP?')
         string(name: 'GIT', description: 'Please enter your git url')
         string(name: 'branch_name', description: 'Please enter your branch name')
