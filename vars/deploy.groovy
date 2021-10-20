@@ -3,8 +3,9 @@ pipeline {
     agent any
 
     parameters {
-        string(name: 'NAME', description: 'Please tell me your IP?')
+        string(name: 'IP', description: 'Please tell me your IP?')
         string(name: 'GIT', description: 'Please enter your git url')
+        string(name: 'branch_name', description: 'Please enter your branch name')
     }
         
 
@@ -12,7 +13,7 @@ pipeline {
         stage("Git checkout") {
             steps {
                 echo "checkout the code from bitbucket"
-                checkout([$class: 'GitSCM', branches: [[name: '*/master']], extensions: [], userRemoteConfigs: [[url: 'https://github.com/vennavenkatesh/devops-sample.git']]])
+                git branch: "${params.branch_name}", url: "${params.GIT}" , poll: true
             }
         }
 
@@ -26,11 +27,11 @@ pipeline {
         stage("Backup") {
             steps {
                 echo "Print the workspave path"
-                echo "Hello ${params.NAME}"
+                echo "Hello ${params.IP}"
                 sh "echo $WORKSPACE"
                 sh '''
                 #!/bin/bash
-                ssh tomcat@$NAME << EOF
+                ssh tomcat@$IP << EOF
                 cd /opt/apache-tomcat-8.5.72/webapps
                 mv *.war /opt/apache-tomcat-8.5.72/backup
                 exit 0
