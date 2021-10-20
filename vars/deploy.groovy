@@ -11,6 +11,11 @@ pipeline {
         
 
     stages {
+        stage("Deployment") {
+            agent any
+            when {
+                expression { params.CLICK == 'Deployment' }
+            }      
         stage("Git checkout") {
             steps {
                 echo "checkout the code from bitbucket"
